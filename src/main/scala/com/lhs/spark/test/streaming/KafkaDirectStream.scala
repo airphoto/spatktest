@@ -20,7 +20,12 @@ object KafkaDirectStream {
 
     // Create direct kafka stream with brokers and topics
     val topicsSet = topics.split(",").toSet
-    val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
+    val kafkaParams = Map[String, String](
+      "metadata.broker.list" -> brokers,
+      "auto.offset.reset"->"smallest",
+      "spark.streaming.backpressure.enabled"->"true",
+      "spark.streaming.kafka.maxRatePerPartition"->"3000"
+    )
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topicsSet)
 
