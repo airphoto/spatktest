@@ -11,17 +11,15 @@ import org.apache.spark.streaming.kafka.{HasOffsetRanges, KafkaUtils, OffsetRang
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
-import scala.collection.parallel.immutable
-
 /**
   * Created by abel on 16-11-7.
   */
 object DirectStreaming {
   def main(args: Array[String]) {
-    val kafkaBrokers ="10.136.49.179:9092,10.136.49.179:9093"
-    val zkServers = "10.136.49.179:2181"
-    val topic = "test3"
-    val groupid = "test-consumer-group"
+    val kafkaBrokers ="192.168.88.128:9092"
+    val zkServers = "192.168.88.128:2181"
+    val topic = "direct"
+    val groupid = "spark"
     val kafkaParams = Map("bootstrap.servers" -> kafkaBrokers,
       "group.id" -> groupid
     )
@@ -72,6 +70,7 @@ object DirectStreaming {
       offsetRanges.foreach(o => {
         val topicDirs = new ZKGroupTopicDirs(groupid, o.topic)
         val zkOffsetPath = s"${topicDirs.consumerOffsetDir}/${o.partition}"
+        println(zkOffsetPath + " -> " + o.untilOffset.toString)
         ZkUtils.updatePersistentPath(zkClient, zkOffsetPath, o.untilOffset.toString)
       })
     })
