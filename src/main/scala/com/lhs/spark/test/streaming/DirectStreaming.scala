@@ -1,12 +1,11 @@
 package com.lhs.spark.test.streaming
 
-import kafka.api.{OffsetRequest, PartitionOffsetRequestInfo}
-import kafka.common.{BrokerNotAvailableException, TopicAndPartition}
-import kafka.consumer.SimpleConsumer
+import com.lhs.spark.hbase.HBaseUtils
+import com.lhs.spark.kafka.KafkaUtil
 import kafka.message.MessageAndMetadata
 import kafka.serializer.StringDecoder
-import kafka.utils.{Json, ZKGroupTopicDirs, ZKStringSerializer, ZkUtils}
-import org.I0Itec.zkclient.ZkClient
+import kafka.utils.{ ZKGroupTopicDirs, ZkUtils}
+import org.apache.hadoop.hbase.util.Bytes
 import org.apache.spark.streaming.kafka.{HasOffsetRanges, KafkaUtils, OffsetRange}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -16,101 +15,61 @@ import org.apache.spark.{SparkConf, SparkContext}
   */
 object DirectStreaming {
   def main(args: Array[String]) {
-    val kafkaBrokers ="192.168.88.128:9092"
-    val zkServers = "192.168.88.128:2181"
-    val topic = "direct"
-    val groupid = "spark"
+
+    val Array(kafkaBrokers,zkServers,topic,groupId) = Array("192.168.88.128:9092","192.168.88.128:2181","direct","spark")
     val kafkaParams = Map("bootstrap.servers" -> kafkaBrokers,
-      "group.id" -> groupid
-    )
-
-    val zkClient = new ZkClient(zkServers, 2000, 2000, ZKStringSerializer)
-    val partitionsAndTopics = ZkUtils.getPartitionsForTopics(zkClient, List(topic))
-    var fromOffsets: Map[TopicAndPartition, Long] = Map()
-
-    partitionsAndTopics.foreach(topic2Partitions => {
-      val topic : String = topic2Partitions._1
-      val partitions : Seq[Int] = topic2Partitions._2
-      val topicDirs = new ZKGroupTopicDirs(groupid, topic)
-
-      partitions.foreach(partition => {
-        val zkPath = s"${topicDirs.consumerOffsetDir}/$partition"
-        ZkUtils.makeSurePersistentPathExists(zkClient, zkPath)
-        val untilOffset = zkClient.readData[String](zkPath)
-        val tp = TopicAndPartition(topic, partition)
-        val offset = try {
-          if (untilOffset == null || untilOffset.trim == "")
-            getMaxOffset(tp, zkClient)
-          else
-            untilOffset.toLong
-        } catch {
-          case e: Exception => getMaxOffset(tp, zkClient)
-        }
-        fromOffsets += (tp -> offset)
-        println(s"Offset init: set offset of $topic/$partition as $offset")
-      })
-    })
-
+                          "group.id" -> groupId
+                          )
+    val (fromOffsets,zkClient) = KafkaUtil.getFromOffset(zkServers,topic,groupId)
     val messageHandler = (mmd: MessageAndMetadata[String, String]) => (mmd.topic, mmd.message())
-
-
     var offsetRanges = Array[OffsetRange]()
 
-    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("log streaming")
+    val sparkConf = new SparkConf()
+      .setMaster("local[*]")
+      .setAppName("log streaming")
+      .set("spark.serializer","org.apache.spark.serializer.KryoSerialization")
+
+    sparkConf.registerKryoClasses(Array(classOf[KafkaUtil]))
 
     val sc = new SparkContext(sparkConf)
-    val ssc = new StreamingContext(sc, Seconds(30))
+    val ssc = new StreamingContext(sc, Seconds(10))
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder, (String, String)](ssc, kafkaParams, fromOffsets, messageHandler)
-
 
     messages.transform { rdd =>
       offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
       rdd
     }.foreachRDD(rdd => {
       offsetRanges.foreach(o => {
-        val topicDirs = new ZKGroupTopicDirs(groupid, o.topic)
+        val topicDirs = new ZKGroupTopicDirs(groupId, o.topic)
         val zkOffsetPath = s"${topicDirs.consumerOffsetDir}/${o.partition}"
-        println(zkOffsetPath + " -> " + o.untilOffset.toString)
+//        println(zkOffsetPath + " -> " + o.untilOffset.toString)
         ZkUtils.updatePersistentPath(zkClient, zkOffsetPath, o.untilOffset.toString)
       })
     })
 
+    val line = messages.mapPartitions(x=>x.flatMap(_._2.split(" ")))
+    val wordCounts = line.mapPartitions(x=>{
+      x.map((_,1L))
+    })
 
+    wordCounts.foreachRDD(rdd=>{
+      if (rdd!=null)
+        rdd.foreachPartition(par=>{
+        val connection = HBaseUtils.getConnection
+        val table = HBaseUtils.getTable(connection,"word")
+        par.map(x=> {
+          val rk = Bytes.toBytes("10005")
+          val cf = Bytes.toBytes("info")
+          val word = Bytes.toBytes(x._1)
+          (rk,cf,word,x._2)
+        }
+        ).foreach(x=>table.incrementColumnValue(x._1,x._2,x._3,x._4))
+        HBaseUtils.close(connection,table)// 必须关闭connection和table
+      })
+    })
 
     ssc.start()
     ssc.awaitTermination()
   }
 
-
-
-  private def getMaxOffset(tp : TopicAndPartition, zkClient: ZkClient):Long = {
-
-    val request = OffsetRequest(Map(tp -> PartitionOffsetRequestInfo(OffsetRequest.LatestTime, 1)))
-
-    ZkUtils.getLeaderForPartition(zkClient, tp.topic, tp.partition) match {
-      case Some(brokerId) => {
-        ZkUtils.readDataMaybeNull(zkClient, ZkUtils.BrokerIdsPath + "/" + brokerId)._1 match {
-          case Some(brokerInfoString) => {
-            Json.parseFull(brokerInfoString) match {
-              case Some(m) =>
-                val brokerInfo = m.asInstanceOf[Map[String, Any]]
-                val host = brokerInfo.get("host").get.asInstanceOf[String]
-                val port = brokerInfo.get("port").get.asInstanceOf[Int]
-                new SimpleConsumer(host, port, 10000, 100000, "getMaxOffset")
-                  .getOffsetsBefore(request)
-                  .partitionErrorAndOffsets(tp)
-                  .offsets
-                  .head
-              case None =>
-                throw new BrokerNotAvailableException("Broker id %d does not exist".format(brokerId))
-            }
-          }
-          case None =>
-            throw new BrokerNotAvailableException("Broker id %d does not exist".format(brokerId))
-        }
-      }
-      case None =>
-        throw new Exception("No broker for partition %s - %s".format(tp.topic, tp.partition))
-    }
-  }
 }

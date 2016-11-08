@@ -17,13 +17,13 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-<property>
+<!--<property>
  <name>fs.defaultFS</name>
  <value>hdfs://bigdata:9000</value>
 </property>
-<!-- 指定hadoop运行时产生文件的存储目录 -->
+&lt;!&ndash; 指定hadoop运行时产生文件的存储目录 &ndash;&gt;
 <property>
   <name>hadoop.tmp.dir</name>
   <value>/root/hadoop/tmp</value>
-</property>
+</property>-->
 </configuration>

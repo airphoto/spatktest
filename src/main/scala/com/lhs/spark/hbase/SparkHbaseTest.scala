@@ -20,7 +20,7 @@ object SparkHbaseRead {
 
   def main(args: Array[String]) {
     val conf = HBaseConfiguration.create()
-    conf.set(TableInputFormat.INPUT_TABLE,"user")
+    conf.set(TableInputFormat.INPUT_TABLE,"word")
     val sparkConf = new SparkConf().setAppName("sparkHbase").setMaster("local[*]")
     val sc = new SparkContext(sparkConf)
 
