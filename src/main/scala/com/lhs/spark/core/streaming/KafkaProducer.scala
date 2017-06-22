@@ -1,4 +1,4 @@
-package com.lhs.spark.test.streaming
+package com.lhs.spark.core.streaming
 
 import java.util.HashMap
 

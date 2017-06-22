@@ -1,4 +1,4 @@
-package com.lhs.spark.test.streaming
+package com.lhs.spark.core.streaming
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
