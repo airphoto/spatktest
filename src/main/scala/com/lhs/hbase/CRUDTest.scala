@@ -31,11 +31,11 @@ object CRUDTest {
 
 
   def main(args: Array[String]) {
-    val table = getTable("user")
+    val table = getTable("callingnumber_count_day")
     val put = new Put(Bytes.toBytes("1003"))
-    put.addColumn(Bytes.toBytes("info"),Bytes.toBytes("name"),Bytes.toBytes("wangwu"))
-    put.addColumn(Bytes.toBytes("info"),Bytes.toBytes("age"),Bytes.toBytes("29"))
-    put.addColumn(Bytes.toBytes("info"),Bytes.toBytes("sex"),Bytes.toBytes("man"))
+    put.addColumn(Bytes.toBytes("cf"),Bytes.toBytes("name"),Bytes.toBytes("wangwu"))
+    put.addColumn(Bytes.toBytes("cf"),Bytes.toBytes("age"),Bytes.toBytes("29"))
+    put.addColumn(Bytes.toBytes("cf"),Bytes.toBytes("sex"),Bytes.toBytes("man"))
     table.put(put)
     closeResource(table)
   }

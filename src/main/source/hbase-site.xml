@@ -23,7 +23,7 @@
 <configuration>
 <property>
     <name>hbase.rootdir</name>
-    <value>hdfs://bigdata:9000/hbase</value>
+    <value>hdfs://hadoop-namenode1:9000/hbase</value>
   </property>
   <property>
     <name>hbase.cluster.distributed</name>
@@ -31,6 +31,6 @@
   </property>
   <property>
     <name>hbase.zookeeper.quorum</name>
-    <value>bigdata</value>
+    <value>hadoop-datanode1,hadoop-datanode2,hadoop-datanode3</value>
   </property>
 </configuration>

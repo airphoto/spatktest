@@ -20,7 +20,7 @@ object SparkHbaseRead {
 
   def main(args: Array[String]) {
     val conf = HBaseConfiguration.create()
-    conf.set(TableInputFormat.INPUT_TABLE,"word")
+    conf.set(TableInputFormat.INPUT_TABLE,"callingnumber_count_day")
     val sparkConf = new SparkConf().setAppName("sparkHbase").setMaster("local[*]")
     val sc = new SparkContext(sparkConf)
 
@@ -40,9 +40,9 @@ object SparkHbaseRead {
 
     userRDD.foreach{case(_,result)=>
         val key = Bytes.toInt(result.getRow)
-        val name = Bytes.toString(result.getValue(Bytes.toBytes("info"),Bytes.toBytes("name")))
-        val age = Bytes.toString(result.getValue(Bytes.toBytes("info"),Bytes.toBytes("age")))
-        val sex = Bytes.toString(result.getValue(Bytes.toBytes("info"),Bytes.toBytes("sex")))
+        val name = Bytes.toString(result.getValue(Bytes.toBytes("cf"),Bytes.toBytes("name")))
+        val age = Bytes.toString(result.getValue(Bytes.toBytes("cf"),Bytes.toBytes("age")))
+        val sex = Bytes.toString(result.getValue(Bytes.toBytes("cf"),Bytes.toBytes("sex")))
 
         println(s"row key $key name $name age $age sex $sex")
     }
