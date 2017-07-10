@@ -1,11 +1,6 @@
-package com.lhs.spark
+package com.lhs.spark.core.ss
 
-import org.apache.spark.{SparkContext, SparkConf}
-import org.apache.spark.sql.SparkSession
-
-/**
- * Created by Administrator on 2016/12/27.
- */
+import org.apache.spark.{SparkConf, SparkContext}
 
 /**
  * <P>@ObjectName : Test</P>

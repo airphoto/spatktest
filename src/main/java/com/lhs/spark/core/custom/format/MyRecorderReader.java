@@ -14,7 +14,7 @@ import org.apache.hadoop.util.LineReader;
 import java.io.IOException;
 
 /**
- * Created by Administrator on 2017/7/6.
+ * Created by Administrator on 2016/7/6.
  */
 public class MyRecorderReader extends RecordReader<Text, Text> {
     private LineReader lr;

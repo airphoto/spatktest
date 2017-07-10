@@ -1,7 +1,7 @@
-package com.lhs.spark
+package com.lhs.spark.core.ss
 
 /**
- * Created by Administrator on 2017/6/28.
+ * Created by Administrator on 2016/12/27.
  */
 class SecondarySort(val first:Int,val second:Int) extends Ordered[SecondarySort] with Serializable{
   override def compare(that: SecondarySort): Int = {
