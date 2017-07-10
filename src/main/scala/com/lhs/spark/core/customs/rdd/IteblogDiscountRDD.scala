@@ -6,7 +6,7 @@ import org.apache.spark.annotation.DeveloperApi
 import org.apache.spark.rdd.RDD
 
 /**
- * Created by Administrator on 2017/6/22.
+ * Created by Administrator on 2016/6/22.
  */
 class IteblogDiscountRDD(pre:RDD[SalesRecord],discountPercentage:Double) extends RDD[SalesRecord](pre){
   @DeveloperApi

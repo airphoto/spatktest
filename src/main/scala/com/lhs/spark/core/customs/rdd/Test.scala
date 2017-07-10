@@ -4,15 +4,11 @@ import com.lhs.spark.core.customs.add_functions.SalesRecord
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
- * Created by Administrator on 2017/6/22.
- */
-
-/**
   * <P>@ObjectName : Test</P>
   *
   * <P>@USER : abel.li </P>
   *
-  * <P>@CREATE_AT : 2017/6/22 </P>
+  * <P>@CREATE_AT : 2016/6/22 </P>
   *
   * <P>@DESCRIPTION : TODO </P>
   */

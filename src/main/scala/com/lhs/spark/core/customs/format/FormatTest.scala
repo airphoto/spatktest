@@ -1,6 +1,6 @@
 package com.lhs.spark.core.customs.format
 
-import com.lhs.spark.core.custom.format.FindMaxValueInputFormat
+import com.lhs.spark.core.custom.format.{CustomInputFormat, FindMaxValueInputFormat}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.io.{ArrayWritable, IntWritable, LongWritable, Text}
@@ -26,7 +26,8 @@ object FormatTest {
     val sc = new SparkContext(sparkConf)
     val conf = HBaseConfiguration.create()
 
-    val df = sc.newAPIHadoopRDD[IntWritable,ArrayWritable,FindMaxValueInputFormat](conf,classOf[FindMaxValueInputFormat],classOf[IntWritable],classOf[ArrayWritable])
+    val df = sc.newAPIHadoopFile[Text,Text,CustomInputFormat]("hdfs://192.168.2.32:8020/data/test/tmp/format")
+//    val df = sc.newAPIHadoopFile[Text,Text,CustomInputFormat]("dfs:/data/test/tmp/format")
     df.collect().foreach(println)
     sc.stop()
   }

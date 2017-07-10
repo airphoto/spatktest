@@ -3,7 +3,7 @@ package com.lhs.spark.core.customs.add_functions
 import org.apache.spark.rdd.RDD
 
 /**
- * Created by Administrator on 2017/6/22.
+ * Created by Administrator on 2016/6/22.
  */
 class SalesRecord(val id:String,
                    val customerID:String,

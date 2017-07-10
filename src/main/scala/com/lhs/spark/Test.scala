@@ -52,10 +52,7 @@ object Test {
       val thisProvinceAreaCode = "024,0411,0412,0245,0244,0415,0416,0417,0418,0419,0427,0247,0421,0429"
       val mobilePhones = "134、135、136、137、138、139、147、150、151、152、157、158、159、172、178、182、183、184、187、188、130、131、132、145、155、156、171、175、176、185、186、170、133、149、153、173、177、180、181、189"
       // 是手机号码,判断被叫号码是否带区号前缀
-      if (mobilePhones.indexOf(mobilePhone.substring(0, 3)) >= 0 && thisProvinceAreaCode.indexOf(str.substring(0, 3)) < 0 && thisProvinceAreaCode.indexOf(str.substring(0, 4)) < 0)
-        true
-      else
-        false
+      mobilePhones.indexOf(mobilePhone.substring(0, 3)) >= 0 && thisProvinceAreaCode.indexOf(str.substring(0, 3)) < 0 && thisProvinceAreaCode.indexOf(str.substring(0, 4)) < 0
     }
   }
 }

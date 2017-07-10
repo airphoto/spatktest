@@ -10,15 +10,11 @@ import org.apache.spark.{HashPartitioner, SparkContext, SparkConf}
 import org.apache.spark.sql.SparkSession
 
 /**
- * Created by Administrator on 2017/2/7.
- */
-
-/**
  * <P>@ObjectName : Dependence</P>
  *
  * <P>@USER : abel.li </P>
  *
- * <P>@CREATE_AT : 2017/2/7 </P>
+ * <P>@CREATE_AT : 2016/2/7 </P>
  *
  * <P>@DESCRIPTION : TODO </P>
  */

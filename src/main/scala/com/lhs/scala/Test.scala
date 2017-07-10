@@ -1,6 +1,9 @@
 package com.lhs.scala
 
-import java.io.File
+import java.io.{PrintWriter, File}
+import java.sql.{DriverManager, PreparedStatement, Connection}
+import java.util
+import java.util.Properties
 
 /**
  * Created by Administrator on 2017/6/26.
@@ -18,19 +21,38 @@ import java.io.File
 
 object Test {
   def main(args: Array[String]) {
-//    println(gcd(66,42))
-    val filesHere = (new File(".")).listFiles()
-    filesHere.foreach(x=>println(x.getName))
-    val scalaFiles = for{
-      file <- filesHere
-      if file.getName.endsWith(".scala")
-    } yield file
-
-    scalaFiles.foreach(x=>println(x.getName))
+    println("\u4FEE\u6539\u6210\u529F")
+//    val filesHere = (new File(".")).listFiles()
+//    filesHere.foreach(x=>println(x.getName))
+//    val scalaFiles = for{
+//      file <- filesHere
+//      if file.getName.endsWith(".scala")
+//    } yield file
+//
+//    scalaFiles.foreach(x=>println(x.getName))
   }
 
-  //找公约数
+  //找最大公约数
   def gcd(a:Int,b:Int):Int={
     if(b==0) a else gcd(b,a%b)
+  }
+
+  def withPrintWriter(file: File,op:PrintWriter=>Unit): Unit ={
+    val writer = new PrintWriter(file)
+    try{
+      op(writer)
+    }finally {
+      writer.close()
+    }
+  }
+
+
+  def withInsertData(connection: Connection,preparedStatement: PreparedStatement)(op:(Connection,PreparedStatement)=>Unit): Unit ={
+
+    try{
+      op(connection,preparedStatement)
+    }finally {
+      connection.close()
+    }
   }
 }

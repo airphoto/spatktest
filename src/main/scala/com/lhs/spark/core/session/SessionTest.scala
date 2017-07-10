@@ -7,7 +7,7 @@ import org.apache.spark.sql.types.{StructType, StringType, StructField}
  * Created by Administrator on 2016/11/8.
  */
 object SessionTest {
-  case class Person(name:String,age:Long)  //case class 不能在main方法红定义
+  case class Person(name:String,age:Long)
   def main(args: Array[String]) {
     val spark = getSession
     import spark.implicits._
