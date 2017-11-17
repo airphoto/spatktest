@@ -30,6 +30,18 @@ object Test {
 //    } yield file
 //
 //    scalaFiles.foreach(x=>println(x.getName))
+
+    val u = List(1,2,3,6,5)
+    u.flatMap(x=>{
+      val index = u.indexOf(x)+1
+      u.combinations(index).flatMap(x=>{
+        if(u.length == index -1)
+          Array(x.sorted.mkString(","),x.sorted.mkString("[",",","]"))
+        else
+          Array(x.sorted.mkString(","))
+      })
+    }).foreach(println)
+
   }
 
   //找最大公约数

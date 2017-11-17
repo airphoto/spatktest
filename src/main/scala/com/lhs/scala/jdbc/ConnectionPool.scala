@@ -12,7 +12,7 @@ package com.lhs.scala.jdbc
 import com.jolbox.bonecp.BoneCP
 import com.jolbox.bonecp.BoneCPConfig
 import org.slf4j.LoggerFactory
-import java.sql.{Statement, Connection}
+import java.sql.{Connection, PreparedStatement, Statement}
 
 object ConnectionPool {
 
@@ -22,14 +22,14 @@ object ConnectionPool {
     try {
       Class.forName("org.postgresql.Driver")
       val config = new BoneCPConfig()
-      config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/test")
+      config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/world?useSSL=false")
       config.setUsername("root")
       config.setPassword("123456")
       config.setMinConnectionsPerPartition(2)
       config.setMaxConnectionsPerPartition(5)
       config.setPartitionCount(3)
       config.setCloseConnectionWatch(true)// if connection is not closed throw exception
-      config.setLogStatementsEnabled(true) // for debugging purpose
+      config.setLogStatementsEnabled(false) // for debugging purpose
       Some(new BoneCP(config))
     } catch {
       case exception: Exception =>
@@ -45,7 +45,7 @@ object ConnectionPool {
     }
   }
 
-  def withConnectOption(connection: Connection,statement: Statement)(op:(Connection,Statement)=>Unit): Unit ={
+  def withConnectOption(connection: Connection,statement: PreparedStatement)(op:(Connection,PreparedStatement)=>Unit): Unit ={
     try{
       op(connection,statement)
     }catch {

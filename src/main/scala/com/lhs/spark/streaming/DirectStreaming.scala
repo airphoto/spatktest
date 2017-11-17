@@ -1,4 +1,4 @@
-package com.lhs.spark.core.streaming
+package com.lhs.spark.streaming
 
 import com.lhs.spark.hbase.HBaseUtils
 import com.lhs.spark.kafka.KafkaUtil

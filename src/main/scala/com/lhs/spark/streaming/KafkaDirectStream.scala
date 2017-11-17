@@ -1,4 +1,4 @@
-package com.lhs.spark.core.streaming
+package com.lhs.spark.streaming
 
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
@@ -10,7 +10,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
   */
 object KafkaDirectStream {
   def main(args: Array[String]) {
-    val Array(brokers,topics) = Array("192.168.0.105:9092","test")
+    val Array(brokers,topics) = Array("localhost:9092","test")
     var offsetRanges = Array[OffsetRange]()
     // Create context with 2 second batch interval
     val sparkConf = new SparkConf().setAppName("DirectKafkaWordCount").setMaster("local[*]")

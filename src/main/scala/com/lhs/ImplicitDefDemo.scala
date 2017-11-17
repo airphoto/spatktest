@@ -22,8 +22,8 @@ object ImplicitDefDemo {
     implicit def str2Int(str:String) = str.toInt
   }
   def main(args: Array[String]) {
-    import MyImplicitTypeConversion.str2Int
-    val max = math.max("1",2)
-    print(max)
+//    import MyImplicitTypeConversion.str2Int
+//    val max = math.max("1",2)
+//    print(max)
   }
 }

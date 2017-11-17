@@ -1,4 +1,4 @@
-package com.lhs.spark.core.streaming
+package com.lhs.spark.streaming
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
@@ -14,7 +14,7 @@ object KafkaString {
 
     Logger.getRootLogger.setLevel(Level.ERROR)
 
-    val Array(zkQuorum,group,topics,numThreads) = Array("192.168.0.105:2181","bigdata","test","2")
+    val Array(zkQuorum,group,topics,numThreads) = Array("datanode1:2181,datanode2:2181,datanode3:2181","streaming_test","test","2")
     val sparkConf = new SparkConf().setAppName("kafkaWordCount").setMaster("local[*]")
     val ssc = new StreamingContext(sparkConf,Seconds(2))
     ssc.checkpoint("checkpoint")

@@ -1,4 +1,4 @@
-package com.lhs.spark.core.streaming
+package com.lhs.spark.streaming
 
 import java.text.SimpleDateFormat
 import java.util.Calendar

@@ -19,7 +19,7 @@ object ConnectionPoolTest extends App {
   val query = "select * from dim_date"
   ConnectionPool.getConnection match {
     case Some(connection) =>
-      val statement = connection.createStatement()
+      val statement = connection.prepareStatement(query)
       ConnectionPool.withConnectOption(connection,statement) {(connection,statement)=>
         val result = statement.executeQuery(query)
         val my = new MyResultSet(result)

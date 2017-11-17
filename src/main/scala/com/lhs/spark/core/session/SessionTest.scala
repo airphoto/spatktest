@@ -14,13 +14,7 @@ object SessionTest {
 
     val sql = "(select count(*) from itim_wuxi2.call_log_201611) tmp" //必须做为一个table
 
-    val jdbcDF = spark.read.format("jdbc")
-      .option("url","jdbc:mysql://127.0.0.1:3306")
-      .option("user","root")
-      .option("password","123456")
-      .option("dbtable",sql)
-      .option("numPartitions","10")
-      .load()
+    val jdbcDF = spark.read.format("jdbc").option("url","jdbc:mysql://10.111.64.184:3306/test?useSSL=false").option("user","shop_test").option("password","XL@2016mysql").option("dbtable","user_info").option("numPartitions","10").load()
     jdbcDF.show()
     spark.stop()
   }

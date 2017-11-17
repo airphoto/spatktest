@@ -36,7 +36,7 @@ object Dependence {
       (null,x+"||xx"+","+index)
     })
 //    pairData.partitionBy(new HashPartitioner(100)).saveAsHadoopFile("E:\\tmpdata\\index",classOf[String],classOf[String],classOf[RDDMutipleTextOutputFormat])
-    pairData.partitionBy(new HashPartitioner(288)).saveAsHadoopFile("E:\\tmpdata\\minutes",classOf[NullWritable],classOf[String],classOf[RDDMutipleTextOutputFormat])
+    pairData.saveAsHadoopFile("E:\\tmpdata\\minutes",classOf[NullWritable],classOf[String],classOf[RDDMutipleTextOutputFormat])
     sc.stop()
 
 
