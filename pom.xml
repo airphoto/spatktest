@@ -97,6 +97,11 @@
       <artifactId>spark-graphx_2.11</artifactId>
       <version>2.2.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.jblas</groupId>
+      <artifactId>jblas</artifactId>
+      <version>1.2.4</version>
+    </dependency>
   </dependencies>
 
   <build>

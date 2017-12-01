@@ -2,7 +2,8 @@ package com.lhs.spark.graph
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkContext
-import org.apache.spark.graphx.{Edge, Graph, VertexId}
+import org.apache.spark.graphx.util.GraphGenerators
+import org.apache.spark.graphx.{Edge, Graph, GraphLoader, VertexId}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
@@ -12,9 +13,10 @@ object GraphExample {
     val spark = SparkSession.builder().master("local").appName("GraphExample").getOrCreate()
     val sc = spark.sparkContext
 
-    val graph = createGraph(sc)
+//    val graph = createGraph(sc)
 //    graphAttributes(graph)
-    graphTruplet(graph)
+//    graphTruplet(graph)
+    pregelTest(sc)
     spark.close()
   }
 
@@ -89,5 +91,33 @@ object GraphExample {
 
     // 关于 triplet 的汇总信息
 //    graph.collectNeighborIds()
+  }
+
+  //Pregel 运算符来表达单源最短路径的计算。
+  def pregelTest(sc:SparkContext)={
+    val graph = GraphGenerators.logNormalGraph(sc,10)
+    val edges = graph.mapEdges(e => e.attr.toDouble)
+    val sourceID:VertexId = 4
+    val initialGraph = graph.mapVertices((id,_)=>{
+      if(id==sourceID) 0.0 else Double.PositiveInfinity
+    })
+
+    val sssp = initialGraph.pregel(Double.PositiveInfinity)(
+      (id,dist,newDist) => math.min(dist,newDist),
+      triplet=>{
+        if(triplet.srcAttr + triplet.attr < triplet.dstAttr){
+          Iterator((triplet.dstId,triplet.srcAttr+triplet.attr))
+        }else{
+          Iterator.empty
+        }
+      },
+      (a,b)=>math.min(a,b)
+    )
+
+    println(sssp.vertices.collect.sortBy(_._1).mkString("\n"))
+  }
+
+  def testEdgeListFile(sc:SparkContext){
+    val graph = GraphLoader.edgeListFile(sc,"")
   }
 }

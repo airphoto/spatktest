@@ -61,4 +61,20 @@ object SQLExample {
     predDF.agg(max("ID").as("maxID"),mean("Population").as("mean")).show()
 
   }
+
+  def loadMysqlData(sparkSession: SparkSession)={
+    val table = "(select * from city where ID<=1000) myCity"
+    val jdbcDF = sparkSession
+      .read
+      .format("jdbc")
+      .option("url","jdbc:mysql://localhost:3306/world")
+      .option("dbtable",table)
+      .option("user","root")
+      .option("password","123456")
+      .option("partitionColumn","ID")
+      .option("lowerBound","100")
+      .option("upperBound","4079")
+      .option("numPartitions","4")
+      .load()
+  }
 }
