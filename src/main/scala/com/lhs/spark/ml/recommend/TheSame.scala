@@ -58,8 +58,8 @@ object TheSame {
     //推荐模型效果的评估
 
     // 均方差（MSE）
-    val moviesForUser = model.predict()
-    val actualRating = moviesForUser.take(1)(0)
+//    val moviesForUser = model.predict()
+//    val actualRating = moviesForUser.take(1)(0)
 
   }
 

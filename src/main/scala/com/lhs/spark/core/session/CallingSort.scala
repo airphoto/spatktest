@@ -68,10 +68,11 @@ object CallingSort {
     filterData.take(10).foreach(println)
 //
 //    //计算出最近的一次时间
-//    val zero = ArrayBuffer[(String,String,String,String)]()
-//    val addToList = (buffer:ArrayBuffer[(String,String,String,String)],v:(String,String,String,String)) => buffer += v
-//    val combine = (buffer1:ArrayBuffer[(String,String,String,String)],buffer2:ArrayBuffer[(String,String,String,String)]) => (buffer1 ++= buffer2).sortWith((x,y)=>maxOfTwo(x._2,y._2) < 0)
-//    val daysData = filterData.map(x=>(x._1,(x._2,x._3,x._4,x._5))).aggregateByKey(zero)(addToList,combine)
+    val zero = ArrayBuffer[(String,String,String,String)]()
+    val addToList = (buffer:ArrayBuffer[(String,String,String,String)],v:(String,String,String,String)) => buffer += v
+    val combine = (buffer1:ArrayBuffer[(String,String,String,String)],buffer2:ArrayBuffer[(String,String,String,String)]) => (buffer1 ++= buffer2).sortWith((x,y)=>maxOfTwo(x._2,y._2) < 0)
+    val daysData = filterData.map(x=>(x._1,(x._2,x._3,x._4,x._5))).aggregateByKey(zero)(addToList,combine)
+
     val daysData2 = filterData.map(x=>(x._1,(x._2,x._3,x._4,x._5,x._6))).reduceByKey((x,y)=>{
       if(x._5>y._5) x else y
     }).filter(x=>((x._2._5<=30 && daysOfTwo(x._2._1,"2017/8/16")>30)) || (x._2._5>30 && daysOfTwo(x._2._1,"2017/8/16")>1))

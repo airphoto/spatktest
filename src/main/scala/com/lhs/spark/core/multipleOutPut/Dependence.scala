@@ -19,8 +19,8 @@ import org.apache.spark.{HashPartitioner, SparkConf, SparkContext}
 
 object Dependence {
 
-  class RDDMutipleTextOutputFormat extends MultipleTextOutputFormat[NullWritable,Any]{
-    override def generateFileNameForKeyValue(key: NullWritable, value: Any, name: String): String =
+  class RDDMutipleTextOutputFormat extends org.apache.hadoop.mapred.lib.MultipleTextOutputFormat[org.apache.hadoop.io.NullWritable,Any]{
+    override def generateFileNameForKeyValue(key: org.apache.hadoop.io.NullWritable, value: Any, name: String): String =
       value.asInstanceOf[String].split(",")(1)
 //    key.asInstanceOf[String]
   }

@@ -1,7 +1,5 @@
 package com.lhs.spark.streaming
 
-import com.lhs.spark.hbase.HBaseUtils
-import com.lhs.spark.kafka.KafkaUtil
 import kafka.common.TopicAndPartition
 import kafka.message.MessageAndMetadata
 import kafka.serializer.StringDecoder
@@ -16,7 +14,7 @@ import org.apache.spark.{SparkConf, SparkContext}
   * Created by abel on 16-11-7.
   */
 object DirectStreaming {
-//  def main(args: Array[String]) {
+/*//  def main(args: Array[String]) {
 //    val ssc = StreamingContext.getOrCreate(".",
 //      () => {
 //        createContext()
@@ -103,5 +101,5 @@ object DirectStreaming {
     line.print(10)
     ssc.start()
     ssc.awaitTermination()
-  }
+  }*/
 }
