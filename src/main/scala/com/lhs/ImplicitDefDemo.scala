@@ -58,7 +58,7 @@ object ImplicitDefDemo {
 //    proper.put("user","root")
 //    proper.put("password","123456")
 //    ds.repartition(10).write.mode(SaveMode.Overwrite).jdbc("jdbc:mysql://localhost:3306/test","dim_date",proper)
-    ds.coalesce(1).write.parquet("/dbdata/output/date")
+    ds.coalesce(1).write.parquet("date_parquet")
     ds.show(false)
     spark.close()
   }

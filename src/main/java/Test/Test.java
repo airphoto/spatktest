@@ -1,15 +1,26 @@
 package Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Administrator on 2016/9/27.
  */
 public class Test {
-//    public static void main(String[] args) {
-//        System.out.println(hash("key"));
-//    }
+
+    public static List<Map<String,Object>> findByClickids(Object[] clickids){
+        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("key",1);
+        list.add(map);
+        return list;
+    }
+    public static void main(String[] args) {
+        Object[] clicks = new Object[]{1,2};
+        System.out.println(findByClickids(clicks));
+    }
 //
 //    public static int hash(Object k) {
 //        int h = 0;

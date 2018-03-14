@@ -123,7 +123,7 @@ object Test2 {
     //新增有效
     orderWithAgent.filter($"createtime".startsWith("2018-01-01")).agg(countDistinct("agent_id")).show
 
-
+    3000
 
 
 
