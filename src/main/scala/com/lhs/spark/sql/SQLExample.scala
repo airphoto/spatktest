@@ -56,7 +56,7 @@ object SQLExample {
 
     predDF.agg(Map("ID" -> "max", "Population" -> "avg")).show()
 
-
+    spark.sql("")
     import org.apache.spark.sql.functions._
     predDF.agg(max("ID").as("maxID"),mean("Population").as("mean")).show()
 
