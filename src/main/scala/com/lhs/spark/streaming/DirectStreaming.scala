@@ -102,4 +102,5 @@ object DirectStreaming {
     ssc.start()
     ssc.awaitTermination()
   }*/
+
 }

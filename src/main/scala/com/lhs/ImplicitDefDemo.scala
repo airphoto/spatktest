@@ -61,5 +61,8 @@ object ImplicitDefDemo {
     ds.coalesce(1).write.parquet("date_parquet")
     ds.show(false)
     spark.close()
+    val data = Traversable(1,2,3)
+
+    val map = Map.apply(""->"",""->"",""->"")
   }
 }
